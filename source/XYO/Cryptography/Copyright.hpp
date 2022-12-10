@@ -16,7 +16,6 @@ namespace XYO::Cryptography::Copyright {
 	XYO_CRYPTOGRAPHY_EXPORT const char *publisher();
 	XYO_CRYPTOGRAPHY_EXPORT const char *company();
 	XYO_CRYPTOGRAPHY_EXPORT const char *contact();
-	XYO_CRYPTOGRAPHY_EXPORT const char *fullCopyright();
 };
 
 #endif
