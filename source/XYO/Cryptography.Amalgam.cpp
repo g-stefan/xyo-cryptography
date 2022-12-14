@@ -18,3 +18,4 @@
 #include <XYO/Cryptography/SHA256.cpp>
 #include <XYO/Cryptography/SHA512.cpp>
 #include <XYO/Cryptography/Crypt.cpp>
+#include <XYO/Cryptography/Util.cpp>

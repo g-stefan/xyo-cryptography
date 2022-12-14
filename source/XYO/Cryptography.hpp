@@ -21,5 +21,6 @@
 #include <XYO/Cryptography/SHA256.hpp>
 #include <XYO/Cryptography/SHA512.hpp>
 #include <XYO/Cryptography/Crypt.hpp>
+#include <XYO/Cryptography/Util.hpp>
 
 #endif
