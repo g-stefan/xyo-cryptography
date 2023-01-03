@@ -1,19 +1,23 @@
 {
-	"project": {
-		"name":"xyo-cryptography",
-		"type":"xyo-cpp",
-		"make" : "lib-and-dll",
-		"SPDX-License-Identifier": "MIT",
-		"sourcePath" : "XYO/Cryptography",
-		"testSource" : [
-			"test.01",
-			"test.02",
-			"test.03"
+	"solution": {
+		"name" : "xyo-cryptography",
+		"type" : "xyo-cpp",
+		"projects": [
+			{
+				"name" : "xyo-cryptography",
+				"make" : "lib-and-dll",
+				"SPDX-License-Identifier": "MIT",
+				"sourcePath" : "XYO/Cryptography",
+				"testSource" : [
+					"test.01",
+					"test.02",
+					"test.03"
+				],
+					"dependency" : [
+					"xyo-system"
+				]
+			}
 		],
-		"dependency" : [
-			"xyo-system"
-		],
-		"hasRelease" : true,
-		"githubRelease" : true
+		"hasGithub" : true
 	}
 }
