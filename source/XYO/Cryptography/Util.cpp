@@ -16,13 +16,13 @@ namespace XYO::Cryptography::Util {
 			size_t readLn;
 			SHA256 hashFile;
 			hashFile.processInit();
-			uint8_t buffer[16384];
+			uint8_t buffer[32768];
 			for (;;) {
-				readLn = fileIn.read(buffer, 16384);
+				readLn = fileIn.read(buffer, 32768);
 				if (readLn > 0) {
 					hashFile.processU8(buffer, readLn);
 				};
-				if (readLn < 16384) {
+				if (readLn < 32768) {
 					break;
 				};
 			};
@@ -40,13 +40,13 @@ namespace XYO::Cryptography::Util {
 			size_t readLn;
 			SHA512 hashFile;
 			hashFile.processInit();
-			uint8_t buffer[16384];
+			uint8_t buffer[32768];
 			for (;;) {
-				readLn = fileIn.read(buffer, 16384);
+				readLn = fileIn.read(buffer, 32768);
 				if (readLn > 0) {
 					hashFile.processU8(buffer, readLn);
 				};
-				if (readLn < 16384) {
+				if (readLn < 32768) {
 					break;
 				};
 			};
