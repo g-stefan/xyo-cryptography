@@ -8,13 +8,21 @@
 				"make" : "lib-and-dll",
 				"SPDX-License-Identifier": "MIT",
 				"sourcePath" : "XYO/Cryptography",
-				"testSource" : [
+				"dependency" : [
+					"xyo-system"
+				]
+			},
+			{
+				"name" : [
 					"test.01",
 					"test.02",
 					"test.03"
 				],
-					"dependency" : [
-					"xyo-system"
+				"make" : "exe.static",
+				"category" : "test",
+				"SPDX-License-Identifier": "Unlicense",
+				"dependency" : [
+					"xyo-cryptography"
 				]
 			}
 		],
