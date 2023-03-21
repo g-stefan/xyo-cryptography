@@ -12,10 +12,10 @@
 #endif
 
 namespace XYO::Cryptography::Copyright {
-	XYO_CRYPTOGRAPHY_EXPORT const char *copyright();
-	XYO_CRYPTOGRAPHY_EXPORT const char *publisher();
-	XYO_CRYPTOGRAPHY_EXPORT const char *company();
-	XYO_CRYPTOGRAPHY_EXPORT const char *contact();
+	XYO_CRYPTOGRAPHY_EXPORT std::string copyright();
+	XYO_CRYPTOGRAPHY_EXPORT std::string publisher();
+	XYO_CRYPTOGRAPHY_EXPORT std::string company();
+	XYO_CRYPTOGRAPHY_EXPORT std::string contact();
 };
 
 #endif

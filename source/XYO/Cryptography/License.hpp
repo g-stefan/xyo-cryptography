@@ -13,8 +13,8 @@
 
 namespace XYO::Cryptography::License {
 
-	XYO_CRYPTOGRAPHY_EXPORT const char *license();
-	XYO_CRYPTOGRAPHY_EXPORT const char *shortLicense();
+	XYO_CRYPTOGRAPHY_EXPORT std::string license();
+	XYO_CRYPTOGRAPHY_EXPORT std::string shortLicense();
 
 };
 
