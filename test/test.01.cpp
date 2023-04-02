@@ -26,7 +26,7 @@ void test() {
 		String hash = SHA256::hash(checkHash[k][0]);
 		if (hash != checkHash[k][1]) {
 			char buffer[1024];
-			sprintf(buffer, "* Error: invalid SHA256 %s should be %s from \"%s\"\n", hash.value(), checkHash[k][1], checkHash[k][0]);
+			sprintf(buffer, "invalid SHA256 %s should be %s from \"%s\"\n", hash.value(), checkHash[k][1], checkHash[k][0]);
 			throw(std::runtime_error(buffer));
 		};
 	};

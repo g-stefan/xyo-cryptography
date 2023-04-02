@@ -8,6 +8,7 @@
 	"files.associations": {
 		"new": "cpp",
 		"*.rh": "cpp",
-		"xutility": "cpp"
+		"xutility": "cpp",
+		"system_error": "cpp"
 	}
 }
