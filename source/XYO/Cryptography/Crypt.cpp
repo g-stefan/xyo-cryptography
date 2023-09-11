@@ -11,7 +11,7 @@
 namespace XYO::Cryptography::Crypt {
 
 	//
-	//  [PSEUDO RANDOM SEED SHA512][SIGNATURE SHA512][LENGTH 64BIT - XOR - SHA512 CTR MODE][DATA - XOR - (SHA512 CTR MODE)*2]
+	//  [PSEUDO RANDOM SEED SHA512][SIGNATURE SHA512][LENGTH 64BIT - XOR - (SHA512 CTR MODE)*2][DATA - XOR - (SHA512 CTR MODE)*2]
 	//
 
 	void encrypt(const uint8_t *password, size_t passwordSize, const uint8_t *data, size_t dataSize, Buffer &output) {
@@ -39,21 +39,32 @@ namespace XYO::Cryptography::Crypt {
 		SHA512 keyActive;
 		uint8_t counterBuffer[8];
 		uint8_t xorBuffer[64];
+
 		key.processInit();
 		key.processU8(output.buffer, 128);
-		keyActive.copy(key);
+
+		UConvert::u64ToU8(dataSize, &output.buffer[64 + 64]);
+
 		UConvert::u64ToU8(0, counterBuffer);
+		keyActive.copy(key);
 		keyActive.processU8(counterBuffer, 8);
 		keyActive.processDone();
 		keyActive.toU8(xorBuffer);
-		UConvert::u64ToU8(dataSize, &output.buffer[64 + 64]);
 		xor8(&output.buffer[64 + 64], 8, xorBuffer, 8);
+
+		UConvert::u64ToU8(1, counterBuffer);
+		keyActive.copy(key);
+		keyActive.processU8(counterBuffer, 8);
+		keyActive.processDone();
+		keyActive.toU8(xorBuffer);
+		xor8(&output.buffer[64 + 64], 8, xorBuffer, 8);
+
 		//
 		size_t k;
 		size_t dataLnX = 0;
 		size_t dataToProcess = dataSize;
 		size_t counter;
-		for (k = 0, counter = 1; k < dataLn; k += 64, dataToProcess -= 64, counter += 2) {
+		for (k = 0, counter = 2; k < dataLn; k += 64, dataToProcess -= 64, counter += 2) {
 
 			if (dataToProcess > 64) {
 				dataLnX = 64;
@@ -103,19 +114,31 @@ namespace XYO::Cryptography::Crypt {
 		SHA512 keyActive;
 		uint8_t counterBuffer[8];
 		uint8_t xorBuffer[64];
+		uint8_t sizeBuffer[8];
+
 		key.processInit();
 		key.processU8(data, 64);
 		keyBase.toU8(xorBuffer);
 		key.processU8(xorBuffer, 64);
-		keyActive.copy(key);
+
+		memcpy(sizeBuffer, &data[64 + 64], 8);
+
 		UConvert::u64ToU8(0, counterBuffer);
+		keyActive.copy(key);
 		keyActive.processU8(counterBuffer, 8);
 		keyActive.processDone();
 		keyActive.toU8(xorBuffer);
-		memcpy(counterBuffer, &data[64 + 64], 8);
-		xor8(counterBuffer, 8, xorBuffer, 8);
+		xor8(sizeBuffer, 8, xorBuffer, 8);
+
+		UConvert::u64ToU8(1, counterBuffer);
+		keyActive.copy(key);
+		keyActive.processU8(counterBuffer, 8);
+		keyActive.processDone();
+		keyActive.toU8(xorBuffer);
+		xor8(sizeBuffer, 8, xorBuffer, 8);
+
 		//
-		size_t dataSize = (size_t)UConvert::u64FromU8(counterBuffer);
+		size_t dataSize = (size_t)UConvert::u64FromU8(sizeBuffer);
 		size_t dataLn = ((dataSize / 64) + 1) * 64;
 		//
 		if (64 + 64 + 8 + dataLn > dataSize_) {
@@ -148,7 +171,7 @@ namespace XYO::Cryptography::Crypt {
 		size_t dataLnX = 0;
 		size_t dataToProcess = dataSize;
 		size_t counter;
-		for (k = 0, counter = 1; k < dataLn; k += 64, dataToProcess -= 64, counter += 2) {
+		for (k = 0, counter = 2; k < dataLn; k += 64, dataToProcess -= 64, counter += 2) {
 
 			if (dataToProcess > 64) {
 				dataLnX = 64;
@@ -214,19 +237,31 @@ namespace XYO::Cryptography::Crypt {
 		SHA512 keyActive;
 		uint8_t counterBuffer[8];
 		uint8_t xorBuffer[64];
+		uint8_t sizeBuffer[8];
+
 		key.processInit();
 		key.processU8(data, 64);
 		keyBase.toU8(xorBuffer);
 		key.processU8(xorBuffer, 64);
-		keyActive.copy(key);
+
+		memcpy(sizeBuffer, &data[64 + 64], 8);
+
 		UConvert::u64ToU8(0, counterBuffer);
+		keyActive.copy(key);
 		keyActive.processU8(counterBuffer, 8);
 		keyActive.processDone();
 		keyActive.toU8(xorBuffer);
-		memcpy(counterBuffer, &data[64 + 64], 8);
-		xor8(counterBuffer, 8, xorBuffer, 8);
+		xor8(sizeBuffer, 8, xorBuffer, 8);
+
+		UConvert::u64ToU8(1, counterBuffer);
+		keyActive.copy(key);
+		keyActive.processU8(counterBuffer, 8);
+		keyActive.processDone();
+		keyActive.toU8(xorBuffer);
+		xor8(sizeBuffer, 8, xorBuffer, 8);
+
 		//
-		size_t dataSize = (size_t)UConvert::u64FromU8(counterBuffer);
+		size_t dataSize = (size_t)UConvert::u64FromU8(sizeBuffer);
 		size_t dataLn = ((dataSize / 64) + 1) * 64;
 		//
 		if (64 + 64 + 8 + dataLn > dataSize_) {
