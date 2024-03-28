@@ -14,7 +14,7 @@
 namespace XYO::Cryptography {
 
 	class RandomMT : public Object {
-			XYO_DISALLOW_COPY_ASSIGN_MOVE(RandomMT);
+			XYO_PLATFORM_DISALLOW_COPY_ASSIGN_MOVE(RandomMT);
 
 		protected:
 			int index;

@@ -8,4 +8,4 @@
 #include <XYO/Cryptography/Copyright.rh>
 #include <XYO/Cryptography/Version.rh>
 
-XYO_APPLICATION_VERSION_INFO(XYO_CRYPTOGRAPHY,"xyo-cryptography.dll","XYO Cryptography")
+XYO_PLATFORM_VERSION_INFO(XYO_CRYPTOGRAPHY,"xyo-cryptography.dll","XYO Cryptography")

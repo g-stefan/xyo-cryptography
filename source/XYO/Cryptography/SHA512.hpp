@@ -14,7 +14,7 @@
 namespace XYO::Cryptography {
 
 	class SHA512 : public Object {
-			XYO_DISALLOW_COPY_ASSIGN_MOVE(SHA512);
+			XYO_PLATFORM_DISALLOW_COPY_ASSIGN_MOVE(SHA512);
 
 		protected:
 			XYO_CRYPTOGRAPHY_EXPORT static const uint64_t k_[];

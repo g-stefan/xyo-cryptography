@@ -14,7 +14,7 @@
 namespace XYO::Cryptography {
 
 	class MD5 : public Object {
-			XYO_DISALLOW_COPY_ASSIGN_MOVE(MD5);
+			XYO_PLATFORM_DISALLOW_COPY_ASSIGN_MOVE(MD5);
 
 		protected:
 			XYO_CRYPTOGRAPHY_EXPORT static const uint16_t r[];

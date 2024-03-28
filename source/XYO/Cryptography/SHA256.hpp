@@ -14,7 +14,7 @@
 namespace XYO::Cryptography {
 
 	class SHA256 : public Object {
-			XYO_DISALLOW_COPY_ASSIGN_MOVE(SHA256);
+			XYO_PLATFORM_DISALLOW_COPY_ASSIGN_MOVE(SHA256);
 
 		protected:
 			XYO_CRYPTOGRAPHY_EXPORT static const uint32_t k_[];
