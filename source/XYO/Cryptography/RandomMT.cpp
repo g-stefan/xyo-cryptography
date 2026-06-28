@@ -23,7 +23,7 @@ namespace XYO::Cryptography {
 			seed_ = static_cast<uint32_t>(time(nullptr));
 		};
 		mt[0] = seed_;
-		for (i = 1; i < 623; ++i) {
+		for (i = 1; i < 624; ++i) {
 			mt[i] = (1812433253UL * (mt[i - 1] ^ (mt[i - 1] >> 30)) + i);
 		};
 		index = 0;
@@ -34,7 +34,7 @@ namespace XYO::Cryptography {
 		uint32_t y;
 		if (index == 0) {
 			int i;
-			for (i = 1; i < 623; ++i) {
+			for (i = 0; i < 624; ++i) {
 				y = (mt[i] & 0x80000000UL) + (mt[(i + 1) % 624] & 0x7fffffffUL);
 				mt[i] = mt[(i + 397) % 624] ^ (y >> 1);
 				if (y & 0x00000001UL) {
