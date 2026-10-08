@@ -126,6 +126,7 @@ namespace XYO::Cryptography {
 				return;
 			};
 			length_ -= z;
+			length__ = length_ & (~((size_t)(0x03)));
 			process[stateM] = UConvert::u32FromU8(lastData);
 
 			++stateM;
@@ -156,38 +157,16 @@ namespace XYO::Cryptography {
 
 	void MD5::processDone() {
 		size_t m = length % 64;
+		// pad to 56 mod 64, into the next block if the length does not fit in this one
+		size_t padTo = (m < 56) ? 56 : 64 + 56;
 		uint64_t finalLength = length * 8;
 		uint8_t data[8];
 		memset(data, 0, sizeof(data));
-		if (m < 56) {
-			data[0] = 0x80;
-			processU8(data, 1);
-			++m;
-			data[0] = 0;
-			for (; m < 56; ++m) {
-				processU8(data, 1);
-			};
-			UConvert::u64ToU8(finalLength, data);
-			processU8(data, 8);
-			return;
-		};
-		if (m < 63) {
-			data[0] = 0x80;
-			processU8(data, 1);
-			++m;
-			data[0] = 0;
-			for (; m < 64 + 56; ++m) {
-				processU8(data, 1);
-			};
-			UConvert::u64ToU8(finalLength, data);
-			processU8(data, 8);
-			return;
-		};
 		data[0] = 0x80;
 		processU8(data, 1);
 		++m;
 		data[0] = 0;
-		for (; m < 56; ++m) {
+		for (; m < padTo; ++m) {
 			processU8(data, 1);
 		};
 		UConvert::u64ToU8(finalLength, data);

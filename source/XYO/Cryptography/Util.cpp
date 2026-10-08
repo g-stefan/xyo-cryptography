@@ -10,52 +10,54 @@
 
 namespace XYO::Cryptography::Util {
 
-	bool fileHashSHA256(const char *fileName, String &hash) {
+	template <typename THash>
+	static bool fileHash(const char *fileName, String &hash) {
 		File fileIn;
-		if (fileIn.openRead(fileName)) {
-			size_t readLn;
-			SHA256 hashFile;
-			hashFile.processInit();
-			uint8_t buffer[32768];
-			for (;;) {
-				readLn = fileIn.read(buffer, 32768);
-				if (readLn > 0) {
-					hashFile.processU8(buffer, readLn);
-				};
-				if (readLn < 32768) {
-					break;
-				};
-			};
-			hashFile.processDone();
-			hash = hashFile.getHashHex();
-			fileIn.close();
-			return true;
+		if (!fileIn.openRead(fileName)) {
+			return false;
 		};
-		return false;
+		// read returns a short count both at end of file and on a read error,
+		// File does not tell which one, so compare the bytes hashed with the file size
+		if (!fileIn.seekFromEnd(0)) {
+			return false;
+		};
+		uint64_t fileSize = fileIn.seekTell();
+		if (fileSize == (uint64_t)-1) {
+			return false;
+		};
+		if (!fileIn.seekFromBegin(0)) {
+			return false;
+		};
+		size_t readLn;
+		uint64_t totalLn = 0;
+		THash hashFile;
+		hashFile.processInit();
+		uint8_t buffer[32768];
+		for (;;) {
+			readLn = fileIn.read(buffer, sizeof(buffer));
+			if (readLn > 0) {
+				hashFile.processU8(buffer, readLn);
+				totalLn += readLn;
+			};
+			if (readLn < sizeof(buffer)) {
+				break;
+			};
+		};
+		fileIn.close();
+		if (totalLn != fileSize) {
+			return false;
+		};
+		hashFile.processDone();
+		hash = hashFile.getHashHex();
+		return true;
+	};
+
+	bool fileHashSHA256(const char *fileName, String &hash) {
+		return fileHash<SHA256>(fileName, hash);
 	};
 
 	bool fileHashSHA512(const char *fileName, String &hash) {
-		File fileIn;
-		if (fileIn.openRead(fileName)) {
-			size_t readLn;
-			SHA512 hashFile;
-			hashFile.processInit();
-			uint8_t buffer[32768];
-			for (;;) {
-				readLn = fileIn.read(buffer, 32768);
-				if (readLn > 0) {
-					hashFile.processU8(buffer, readLn);
-				};
-				if (readLn < 32768) {
-					break;
-				};
-			};
-			hashFile.processDone();
-			hash = hashFile.getHashHex();
-			fileIn.close();
-			return true;
-		};
-		return false;
+		return fileHash<SHA512>(fileName, hash);
 	};
 
 };

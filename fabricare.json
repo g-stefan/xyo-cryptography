@@ -1,5 +1,6 @@
 {
 	"solution": {
+		"namespace" : "xyo",
 		"name" : "xyo-cryptography",
 		"type" : "xyo-cpp",
 		"projects": [
@@ -32,7 +33,11 @@
 					"test.01",
 					"test.02",
 					"test.03",
-					"test.04"
+					"test.04",
+					"test.05",
+					"test.06",
+					"test.07",
+					"test.08"
 				],
 				"make" : "exe",
 				"category" : "test",

@@ -15,6 +15,7 @@
 // -
 
 #include <XYO/Cryptography/RandomMT.hpp>
+#include <XYO/Cryptography/SystemRandom.hpp>
 #include <XYO/Cryptography/Avalanche.hpp>
 #include <XYO/Cryptography/XOR8.hpp>
 #include <XYO/Cryptography/MD5.hpp>

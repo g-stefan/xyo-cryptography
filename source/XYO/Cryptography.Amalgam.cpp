@@ -12,6 +12,8 @@
 // -
 
 #include <XYO/Cryptography/RandomMT.cpp>
+#include <XYO/Cryptography/SystemRandom-OS-Linux.cpp>
+#include <XYO/Cryptography/SystemRandom-OS-Windows.cpp>
 #include <XYO/Cryptography/Avalanche.cpp>
 #include <XYO/Cryptography/XOR8.cpp>
 #include <XYO/Cryptography/MD5.cpp>

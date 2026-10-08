@@ -7,11 +7,20 @@
 #include <XYO/Cryptography/Crypt.hpp>
 #include <XYO/Cryptography/XOR8.hpp>
 #include <XYO/Cryptography/SHA512.hpp>
+#include <XYO/Cryptography/SystemRandom.hpp>
 
 namespace XYO::Cryptography::Crypt {
 
 	//
 	//  [PSEUDO RANDOM SEED SHA512][SIGNATURE SHA512][LENGTH 64BIT - XOR - (SHA512 CTR MODE)*2][DATA - XOR - (SHA512 CTR MODE)*2]
+	//
+	//  The password is not a plain text password, it is a SHA512 result (64 bytes),
+	//  the caller hashes the user password before calling these functions, see Crypt.hpp.
+	//  Everywhere below "password" is that SHA512 result, never the plain text.
+	//
+	//  The seed is SHA512(password || data || timestamp in milliseconds || 64 bytes from SystemRandom),
+	//  if SystemRandom does not work the seed is SHA512(password || data || timestamp in milliseconds).
+	//  decrypt reads the seed from the input, it does not depend on how the seed was made.
 	//
 
 	void encrypt(const uint8_t *password, size_t passwordSize, const uint8_t *data, size_t dataSize, Buffer &output) {
@@ -25,6 +34,10 @@ namespace XYO::Cryptography::Crypt {
 		randomSalt.processU8(data, dataSize);
 		UConvert::u64ToU8(DateTime::timestampInMilliseconds(), output.buffer);
 		randomSalt.processU8(output.buffer, 8);
+		uint8_t systemRandom[64];
+		if (SystemRandom::generate(systemRandom, sizeof(systemRandom))) {
+			randomSalt.processU8(systemRandom, sizeof(systemRandom));
+		};
 		randomSalt.processDone();
 		randomSalt.toU8(output.buffer);
 		//
@@ -138,10 +151,16 @@ namespace XYO::Cryptography::Crypt {
 		xor8(sizeBuffer, 8, xorBuffer, 8);
 
 		//
-		size_t dataSize = (size_t)UConvert::u64FromU8(sizeBuffer);
+		// the length field is not authenticated yet, validate it before any arithmetic
+		uint64_t dataSize64 = UConvert::u64FromU8(sizeBuffer);
+		size_t dataAvailable = dataSize_ - (64 + 64 + 8);
+		if (dataSize64 >= (uint64_t)dataAvailable) {
+			return false;
+		};
+		size_t dataSize = (size_t)dataSize64;
 		size_t dataLn = ((dataSize / 64) + 1) * 64;
 		//
-		if (64 + 64 + 8 + dataLn > dataSize_) {
+		if (dataLn > dataAvailable) {
 			return false;
 		};
 		//
@@ -261,10 +280,16 @@ namespace XYO::Cryptography::Crypt {
 		xor8(sizeBuffer, 8, xorBuffer, 8);
 
 		//
-		size_t dataSize = (size_t)UConvert::u64FromU8(sizeBuffer);
+		// the length field is not authenticated yet, validate it before any arithmetic
+		uint64_t dataSize64 = UConvert::u64FromU8(sizeBuffer);
+		size_t dataAvailable = dataSize_ - (64 + 64 + 8);
+		if (dataSize64 >= (uint64_t)dataAvailable) {
+			return false;
+		};
+		size_t dataSize = (size_t)dataSize64;
 		size_t dataLn = ((dataSize / 64) + 1) * 64;
 		//
-		if (64 + 64 + 8 + dataLn > dataSize_) {
+		if (dataLn > dataAvailable) {
 			return false;
 		};
 		//

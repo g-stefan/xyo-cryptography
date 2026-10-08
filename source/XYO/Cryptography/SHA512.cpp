@@ -139,6 +139,7 @@ namespace XYO::Cryptography {
 				return;
 			};
 			length_ -= z;
+			length__ = length_ & (~((size_t)(0x07)));
 			process[stateM] = UConvert::u64FromU8Reversed(lastData);
 
 			++stateM;
@@ -169,43 +170,17 @@ namespace XYO::Cryptography {
 
 	void SHA512::processDone() {
 		size_t m = length0 % 128;
+		// pad to 112 mod 128, into the next block if the length does not fit in this one
+		size_t padTo = (m < 112) ? 112 : 128 + 112;
 		uint64_t finalLength1 = (length1 << 3) | (length0 >> 61);
 		uint64_t finalLength0 = length0 << 3;
 		uint8_t data[8];
 		memset(data, 0, sizeof(data));
-		if (m < 112) {
-			data[0] = 0x80;
-			processU8(data, 1);
-			++m;
-			data[0] = 0;
-			for (; m < 112; ++m) {
-				processU8(data, 1);
-			};
-			UConvert::u64ToU8Reversed(finalLength1, data);
-			processU8(data, 8);
-			UConvert::u64ToU8Reversed(finalLength0, data);
-			processU8(data, 8);
-			return;
-		};
-		if (m < 128) {
-			data[0] = 0x80;
-			processU8(data, 1);
-			++m;
-			data[0] = 0;
-			for (; m < 128 + 112; ++m) {
-				processU8(data, 1);
-			};
-			UConvert::u64ToU8Reversed(finalLength1, data);
-			processU8(data, 8);
-			UConvert::u64ToU8Reversed(finalLength0, data);
-			processU8(data, 8);
-			return;
-		};
 		data[0] = 0x80;
 		processU8(data, 1);
 		++m;
 		data[0] = 0;
-		for (; m < 112; ++m) {
+		for (; m < padTo; ++m) {
 			processU8(data, 1);
 		};
 		UConvert::u64ToU8Reversed(finalLength1, data);

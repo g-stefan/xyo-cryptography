@@ -13,6 +13,10 @@
 
 namespace XYO::Cryptography::Crypt {
 
+	// password is not a plain text password, it is a SHA512 result:
+	// the caller hashes the user password first (SHA512::hashToU8) and passes the 64 bytes,
+	// passwordSize is 64. Crypt uses the bytes as given, it does not hash or check them.
+
 	XYO_CRYPTOGRAPHY_EXPORT void encrypt(const uint8_t *password, size_t passwordSize, const uint8_t *data, size_t dataSize, Buffer &output);
 	XYO_CRYPTOGRAPHY_EXPORT bool decrypt(const uint8_t *password, size_t passwordSize, const uint8_t *data, size_t dataSize, Buffer &output);
 	XYO_CRYPTOGRAPHY_EXPORT bool encryptFile(const uint8_t *password, size_t passwordSize, const char *fileNameIn, const char *fileNameOut);
